@@ -1,25 +1,58 @@
-import { buildQuantumGameServer } from "quantum-game-server-sdk";
+import {
+  BaseMessage,
+  TickType,
+  ToGSGenericMessage,
+  buildQuantumGameServer,
+} from "quantum-game-server-sdk";
 
-const quantumGameServer = buildQuantumGameServer();
+type OurStateField = {
+  messagesSent: number;
+};
 
-quantumGameServer.on("connect", () => {
-  console.log("CONNECTED!!!!", quantumGameServer.qsGSServerId);
-});
+const tick: TickType<
+  {
+    newField?: OurStateField;
+  },
+  BaseMessage
+> = async (gameInstance, gameServer) => {
+  
+  if (!gameInstance.state.newField) {
+    gameInstance.state.newField = {
+      messagesSent: 0,
+    };
+  }
 
-quantumGameServer.on("player-connected", () => {
-  console.log("sadasdsa");
-});
-quantumGameServer.on('generic-message', (message) => {
-  console.log(message, 11112222, "This is iT!");
-  // quantumGameServer.sendGenericMessage({
-  //   data: 'asdasdasd'
-  // });
-})
+  if(gameInstance.messages.length){
+    gameInstance.state.newField.messagesSent += gameInstance.messages.length;
+    // const aaa = await gameServer.getConnectedPlayers(gameInstance.players.map(p => p.id));
+    
+    const oldMessages = gameInstance.messages as ToGSGenericMessage[];
+    const newMessages = oldMessages.map((m) => { 
+      return {
+      data: m.data,
+      playerId: m.playerId
+    }});
+    
 
-quantumGameServer.on("connect", () => {
-  quantumGameServer.sendGenericMessage({
-    data: "asdasdasd",
-  });
+    gameInstance.players.forEach((p) => {
+      gameServer.sendMessage({
+        gameInstanceId: gameInstance.id,
+        playerId: p.id,
+        type: "generic-message",
+        data: newMessages
+      })
+    })
+
+
+  }
+
+  // console.log(gameInstance.id, gameInstance.state.newField.messagesSent);
+  return gameInstance.state;
+};
+
+const quantumGameServer = buildQuantumGameServer({
+  tick,
+  loopRate: 30
 });
 
 quantumGameServer.start();
