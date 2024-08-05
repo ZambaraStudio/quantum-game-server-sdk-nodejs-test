@@ -1,0 +1,17 @@
+{
+  "name": "quantum-game-server-sdk",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "ts-node-dev -- src/index.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "quantum-game-server-sdk": "file:../quantum-game-server-sdk"
+  },
+  "devDependencies": {
+    "ts-node-dev": "^2.0.0"
+  }
+}
