@@ -3,13 +3,14 @@
   "version": "1.0.0",
   "main": "dist/index.js",
   "scripts": {
-    "start": "ts-node-dev -- src/index.ts"
+    "start": "ts-node-dev -- src/index.ts",
+    "build": "tsc"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "quantum-game-server-sdk": "file:../quantum-game-server-sdk"
+    "@zambara-studio/quantum-game-server-sdk-nodejs": "1.0.0"
   },
   "devDependencies": {
     "ts-node-dev": "^2.0.0"

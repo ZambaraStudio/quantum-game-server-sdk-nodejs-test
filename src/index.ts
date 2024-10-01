@@ -3,7 +3,8 @@ import {
   TickType,
   ToGSGenericMessage,
   buildQuantumGameServer,
-} from "quantum-game-server-sdk";
+} from "@zambara-studio/quantum-game-server-sdk-nodejs";
+
 
 type OurStateField = {
   messagesSent: number;
